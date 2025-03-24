@@ -29,6 +29,19 @@ void setup() {
     pinMode(POTENTIOMETER_PIN, INPUT);
     pinMode(TRIGGER_PIN, OUTPUT);
     pinMode(ECHO_PIN, INPUT);
+    
+    setupWiFi();
+}
+
+void setupWiFi() {
+    delay(10);
+    Serial.println("Connexion au WiFi...");
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.println("\nWiFi connecté");
 }
 
 void loop() {

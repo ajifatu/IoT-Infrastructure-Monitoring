@@ -29,8 +29,9 @@ void setup() {
     pinMode(POTENTIOMETER_PIN, INPUT);
     pinMode(TRIGGER_PIN, OUTPUT);
     pinMode(ECHO_PIN, INPUT);
-    
+
     setupWiFi();
+    client.setServer(mqtt_server, mqtt_port);
 }
 
 void setupWiFi() {
@@ -44,7 +45,26 @@ void setupWiFi() {
     Serial.println("\nWiFi connecté");
 }
 
+void reconnectMQTT() {
+    while (!client.connected()) {
+        Serial.print("Connexion au serveur MQTT...");
+        if (client.connect("ESP32_Client")) {
+            Serial.println("Connecté au broker MQTT");
+        } else {
+            Serial.print("Échec, rc=");
+            Serial.print(client.state());
+            Serial.println(" Nouvelle tentative dans 5s");
+            delay(5000);
+        }
+    }
+}
+
 void loop() {
+    
+    if (!client.connected()) {
+      reconnectMQTT();
+    }
+    client.loop();
 
     float temperature = dht.readTemperature();
     float humidity = dht.readHumidity();

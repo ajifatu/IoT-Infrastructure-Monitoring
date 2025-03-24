@@ -24,8 +24,25 @@ DHT dht(DHTPIN, DHTTYPE);
 
 void setup() {
     Serial.begin(115200);
-  }
+
+    dht.begin();
+    pinMode(POTENTIOMETER_PIN, INPUT);
+    pinMode(TRIGGER_PIN, OUTPUT);
+    pinMode(ECHO_PIN, INPUT);
+}
 
 void loop() {
+
+    float temperature = dht.readTemperature();
+    float humidity = dht.readHumidity();
+    int vibration = analogRead(POTENTIOMETER_PIN);
+    float fissure = readDistance();
+
+    // Conversion et affichage
+    Serial.print("Température: "); Serial.println(temperature);
+    Serial.print("Humidité: "); Serial.println(humidity);
+    Serial.print("Vibrations: "); Serial.println(vibration);
+    Serial.print("Taille fissure: "); Serial.println(fissure);
+
     delay(5000);
 }
